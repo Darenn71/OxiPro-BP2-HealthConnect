@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OxiPro Bridge – OxiPro BP2 blood pressure to Health Connect</title>
+<meta name="description" content="Free Android app that sends readings from the OxiPro BP2 Bluetooth blood pressure monitor straight into Google Health Connect. Open source, no account, no cloud.">
+<meta name="keywords" content="OxiPro BP2, OxiPro blood pressure monitor, Health Connect, Android, blood pressure app, MedM, Bluetooth blood pressure">
+<link rel="canonical" href="https://darenn71.github.io/OxiPro-BP2-HealthConnect/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="OxiPro Bridge – OxiPro BP2 to Health Connect">
+<meta property="og:description" content="Free Android app that sends OxiPro BP2 blood pressure readings into Google Health Connect.">
+<meta property="og:url" content="https://darenn71.github.io/OxiPro-BP2-HealthConnect/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 28s-11-7-11-15a6 6 0 0 1 11-3 6 6 0 0 1 11 3c0 8-11 15-11 15z' fill='%23e5484d'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "OxiPro Bridge",
+  "operatingSystem": "Android 8.0+",
+  "applicationCategory": "HealthApplication",
+  "description": "Sends readings from the OxiPro BP2 Bluetooth blood pressure monitor into Google Health Connect.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+  "downloadUrl": "https://github.com/Darenn71/OxiPro-BP2-HealthConnect/releases/latest/download/oxipro-bridge.apk"
+}
+</script>
+<style>
+  :root {
+    --bg: #f7f8fa; --surface: #ffffff; --text: #16181d; --muted: #5c6370;
+    --line: #e3e6eb; --accent: #e5484d; --accent-ink: #ffffff;
+    --good: #2f9e5b; --caution: #d29a06; --concern: #d93a3f;
+    --phone: #14161a; --phone-text: #f2f3f5; --phone-muted: #9aa0aa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1114; --surface: #171a1f; --text: #eceef1; --muted: #9aa1ad;
+      --line: #262a31; --accent: #ff5c61; --accent-ink: #16181d;
+      --good: #4cc27a; --caution: #f0b429; --concern: #ff6b6f;
+      --phone: #050607;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+  header.top { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); text-decoration: none; }
+  .brand svg { width: 26px; height: 26px; }
+  .top nav a { color: var(--muted); text-decoration: none; margin-left: 18px; font-size: 15px; }
+  .top nav a:hover { color: var(--text); }
+
+  .hero { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 48px; align-items: center; padding: 40px 0 64px; }
+  .eyebrow { color: var(--accent); font-weight: 600; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 12px; }
+  h1 { font-size: clamp(32px, 5vw, 48px); line-height: 1.1; margin: 0 0 18px; letter-spacing: -0.02em; }
+  .lede { font-size: 19px; color: var(--muted); margin: 0 0 28px; max-width: 34em; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 12px;
+    font-weight: 600; text-decoration: none; border: 1px solid var(--line); color: var(--text); background: var(--surface);
+  }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  .btn svg { width: 20px; height: 20px; }
+  .small { font-size: 14px; color: var(--muted); margin-top: 14px; }
+
+  .phone {
+    justify-self: center; width: 280px; background: var(--phone); color: var(--phone-text);
+    border-radius: 36px; padding: 26px 22px 30px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  .phone .t { font-weight: 700; font-size: 18px; }
+  .phone .s { color: var(--phone-muted); font-size: 13px; margin-bottom: 22px; }
+  .reading { text-align: center; font-weight: 700; font-size: 54px; line-height: 1; letter-spacing: -0.02em; }
+  .reading .slash { color: var(--phone-muted); font-weight: 400; margin: 0 4px; }
+  .g { color: #66BB6A; } .a { color: #FFCA28; } .r { color: #EF5350; }
+  .unit { text-align: center; color: var(--phone-muted); font-size: 12px; margin: 8px 0 20px; }
+  .row { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,.08); }
+  .row span:first-child { color: var(--phone-muted); }
+  .note { font-size: 13px; color: var(--phone-muted); margin: 14px 0 18px; }
+  .save { display: block; text-align: center; background: #2d6cdf; color: #fff; border-radius: 10px; padding: 11px; font-weight: 600; font-size: 14px; }
+
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 32px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 16px; }
+  .num { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 15px; margin-bottom: 12px; }
+
+  .legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+
+  ul.req { padding-left: 20px; margin: 0; }
+  ul.req li { margin: 6px 0; }
+
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { color: var(--muted); margin: 10px 0 0; }
+
+  .disclaimer { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--caution); border-radius: 12px; padding: 18px 20px; color: var(--muted); font-size: 15px; }
+  footer { padding: 32px 0 48px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 16px; }
+    .grid3, .legend { grid-template-columns: 1fr; }
+    .top nav a:not(:last-child) { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 28s-11-7-11-15a6 6 0 0 1 11-3 6 6 0 0 1 11 3c0 8-11 15-11 15z" fill="var(--accent)"/><path d="M7 15h5l2-4 3 8 2-4h6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      OxiPro Bridge
+    </a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/Darenn71/OxiPro-BP2-HealthConnect">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Free · Open source · Android</p>
+        <h1>Get your OxiPro BP2 readings into Health Connect</h1>
+        <p class="lede">The OxiPro BP2's own app doesn't connect to Health Connect. OxiPro Bridge connects to the monitor over Bluetooth, shows each reading, and saves it to Google Health Connect, where Google Fit, Samsung Health and other apps can see it.</p>
+        <div class="cta">
+          <a class="btn primary" href="https://github.com/Darenn71/OxiPro-BP2-HealthConnect/releases/latest/download/oxipro-bridge.apk">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+            Download APK
+          </a>
+          <a class="btn" href="https://github.com/Darenn71/OxiPro-BP2-HealthConnect">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+            View source
+          </a>
+        </div>
+        <p class="small">Android 8.0 or newer · No account, no ads, no cloud: your readings only go to Health Connect on your phone.</p>
+      </div>
+
+      <div class="phone" role="img" aria-label="Example result screen showing 118 over 76 mmHg, pulse 68">
+        <div class="t">OxiPro Bridge</div>
+        <div class="s">OxiPro BP2 → Health Connect</div>
+        <div class="reading"><span class="g">118</span><span class="slash">/</span><span class="g">76</span></div>
+        <div class="unit">mmHg (systolic / diastolic)</div>
+        <div class="row"><span>Pulse</span><span class="g">68 bpm</span></div>
+        <div class="row"><span>Pulse pressure</span><span class="g">42 mmHg</span></div>
+        <p class="note"><strong style="color:var(--phone-text)">Normal.</strong> Right in the healthy range.</p>
+        <span class="save">Save to Health Connect</span>
+      </div>
+    </div>
+
+    <section id="how">
+      <h2>How it works</h2>
+      <p class="sub">Three taps from cuff to Health Connect.</p>
+      <div class="grid3">
+        <div class="card"><span class="num">1</span><h3>Connect</h3><p>Open the app and tap <em>Connect &amp; Sync</em>. It finds your BP2 over Bluetooth and connects automatically.</p></div>
+        <div class="card"><span class="num">2</span><h3>Measure</h3><p>Take your reading as normal. You'll see the cuff pressure live, then your result, colour-coded with a short plain-English summary.</p></div>
+        <div class="card"><span class="num">3</span><h3>Save</h3><p>Tap <em>Save to Health Connect</em>. Blood pressure and pulse are saved with the time on your phone, ready for any app that reads Health Connect.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What the colours mean</h2>
+      <p class="sub">Each number is checked against published reference ranges from the American Heart Association / American College of Cardiology and Cleveland Clinic.</p>
+      <div class="legend">
+        <div class="card"><h3><span class="dot" style="background:var(--good)"></span>Green</h3><p>In the normal range, e.g. under 120/80 mmHg, or a pulse of 60–100 bpm.</p></div>
+        <div class="card"><h3><span class="dot" style="background:var(--caution)"></span>Amber</h3><p>Worth keeping an eye on, e.g. low blood pressure (under 90/60) or a pulse under 60.</p></div>
+        <div class="card"><h3><span class="dot" style="background:var(--concern)"></span>Red</h3><p>Above the normal range, e.g. 120/80 or higher, a pulse over 100, or an unusually narrow or wide pulse pressure.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 style="margin-bottom:20px">What you need</h2>
+      <ul class="req">
+        <li>An <strong>OxiPro BP2</strong> Bluetooth blood pressure monitor.</li>
+        <li>An <strong>Android phone</strong> running Android 8.0 or newer, with Bluetooth.</li>
+        <li><strong>Health Connect</strong>. It's built into Android 14 and newer. On older phones, install it free from the Google Play Store.</li>
+      </ul>
+    </section>
+
+    <section id="faq">
+      <h2 style="margin-bottom:20px">Questions</h2>
+      <details>
+        <summary>How do I install an APK?</summary>
+        <p>Tap <em>Download APK</em> on your phone, then open the downloaded file. Android will ask you to allow installs from your browser or Files app the first time; allow it, then tap Install. Android may warn that the app isn't from the Play Store. That's expected for apps installed this way.</p>
+      </details>
+      <details>
+        <summary>Do I still need the MedM Health Diary app?</summary>
+        <p>No, but you can keep it. OxiPro Bridge works alongside it. It only handles new readings as you take them, so it doesn't import the history already stored on the monitor.</p>
+      </details>
+      <details>
+        <summary>Where does my data go?</summary>
+        <p>Only to Health Connect on your own phone, and only when you tap Save. The app has no account, no server and no analytics. The source code is public on GitHub if you'd like to check.</p>
+      </details>
+      <details>
+        <summary>Why is the time different from the monitor's screen?</summary>
+        <p>Readings are saved with your phone's clock, not the monitor's. If the BP2's own clock is wrong (for example after changing batteries), that only affects what the monitor itself displays.</p>
+      </details>
+      <details>
+        <summary>Updating says "app not installed". What do I do?</summary>
+        <p>The very first test builds were each signed differently. If you have one of those, uninstall it once and install the latest version. From then on, new versions install over the top. Anything you've already saved stays in Health Connect.</p>
+      </details>
+      <details>
+        <summary>Does it work with other blood pressure monitors?</summary>
+        <p>It's built for the OxiPro BP2's own Bluetooth protocol, so other models probably won't connect. The protocol notes are on GitHub if you'd like to adapt it.</p>
+      </details>
+    </section>
+
+    <section>
+      <div class="disclaimer">
+        <strong>Not medical advice.</strong> OxiPro Bridge shows general reference ranges, not a diagnosis, and isn't a medical device. If your readings are often outside the normal range, or you feel unwell, talk to a doctor. OxiPro Bridge is an independent project and isn't affiliated with or endorsed by OxiPro, MedM or Google.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    OxiPro Bridge · <a href="https://github.com/Darenn71/OxiPro-BP2-HealthConnect">Source on GitHub</a> · <a href="https://github.com/Darenn71/OxiPro-BP2-HealthConnect/releases">All releases</a> · <a href="https://github.com/Darenn71/OxiPro-BP2-HealthConnect/blob/main/PROTOCOL.md">Technical notes</a>
+  </footer>
+</div>
+</body>
+</html>

@@ -11,7 +11,8 @@ Health Connect.
 **[⬇ Download the latest APK](https://github.com/Darenn71/OxiPro-BP2-HealthConnect/releases/latest/download/oxipro-bridge.apk)**
 
 Built automatically on GitHub from the latest code. Open it on your Android
-phone and allow installing from your browser/files app when asked. All
+phone and allow installing from your browser/files app when asked. Website:
+https://darenn71.github.io/OxiPro-BP2-HealthConnect/ · All
 builds are listed on the [Releases page](https://github.com/Darenn71/OxiPro-BP2-HealthConnect/releases).
 
 ## What's here

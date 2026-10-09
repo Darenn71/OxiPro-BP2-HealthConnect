@@ -22,15 +22,32 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
+      # The release key lives only in repository secrets. Pull requests and
+      # forks don't get secrets, so their builds use the debug key instead.
+      - name: Restore signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            echo "SIGNING_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+            echo "Signing with the release key"
+          else
+            echo "::warning::KEYSTORE_BASE64 secret not set; signing with a temporary debug key"
+          fi
+
+      - name: Build release APK
+        env:
+          SIGNING_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        run: ./gradlew assembleRelease --stacktrace
 
       - name: Name the APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk oxipro-bridge.apk
+        run: cp app/build/outputs/apk/release/app-release.apk oxipro-bridge.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: oxipro-bridge-debug-apk
+          name: oxipro-bridge-apk
           path: oxipro-bridge.apk
           retention-days: 30
 
@@ -42,6 +59,6 @@ jobs:
         with:
           tag_name: build-${{ github.run_number }}
           name: Build ${{ github.run_number }}
-          body: Debug APK built from ${{ github.sha }}.
+          body: APK built from ${{ github.sha }}.
           files: oxipro-bridge.apk
           make_latest: true
