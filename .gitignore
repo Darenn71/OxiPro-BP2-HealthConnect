@@ -1,0 +1,22 @@
+# Gradle / build output
+.gradle/
+build/
+app/build/
+
+# Machine-specific
+local.properties
+*.iml
+.idea/
+.vscode/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystores
+*.jks
+*.keystore
+
+# OS
+.DS_Store
+Thumbs.db
+.kotlin/
