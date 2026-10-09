@@ -1,8 +1,10 @@
 # OxiPro Bridge
 
-Reads live readings from the OxiPro BP2 over Bluetooth LE (standard GATT
-Blood Pressure Service `0x1810`) and writes them straight into Android
-Health Connect.
+Reads live readings from the OxiPro BP2 blood pressure monitor over
+Bluetooth LE and saves them to Android Health Connect. The BP2 uses its own
+vendor protocol (service `0xffe0`, not the standard `0x1810` Blood Pressure
+Service), which was reverse-engineered for this app. See
+[PROTOCOL.md](PROTOCOL.md) for the details.
 
 [![Android build](https://github.com/Darenn71/OxiPro-BP2-HealthConnect/actions/workflows/android.yml/badge.svg)](https://github.com/Darenn71/OxiPro-BP2-HealthConnect/actions/workflows/android.yml)
 
@@ -17,15 +19,18 @@ builds are listed on the [Releases page](https://github.com/Darenn71/OxiPro-BP2-
 
 ## What's here
 
-- `app/src/main/java/com/oxipro/bridge/ble/BleManager.kt` — scans, connects,
-  subscribes to indications on the BP Measurement characteristic (`0x2A35`)
+- `app/src/main/java/com/oxipro/bridge/ble/BleManager.kt` — scans, connects
+  to the vendor service (`0xffe0`), sends the handshake and subscribes to
+  notifications on `0xffe1`
 - `app/src/main/java/com/oxipro/bridge/ble/BloodPressureParser.kt` — decodes
-  the IEEE-11073 SFLOAT payload into systolic/diastolic/pulse/timestamp
+  the vendor packets: live cuff pressure while measuring, then the final
+  systolic/diastolic/pulse result
 - `app/src/main/java/com/oxipro/bridge/health/HealthConnectManager.kt` —
   writes `BloodPressureRecord` (+ `HeartRateRecord` if pulse present) via the
   Jetpack Health Connect SDK
 - `app/src/main/java/com/oxipro/bridge/MainActivity.kt` — bare-bones screen
-  wiring permissions → scan → connect → auto-write on every reading
+  wiring permissions → scan → connect → show result → save to Health
+  Connect when you tap "Save to Health Connect"
 
 ## One-time setup (VS Code + PowerShell, no Android Studio required)
 
@@ -89,30 +94,19 @@ cd oxipro-bridge
 adb install -r app\build\outputs\apk\debug\app-debug.apk
 ```
 
-## Before it'll work against the real device
+## Using it with the device
 
-1. **Confirm the GATT profile.** `BleManager` currently assumes the OxiPro
-   BP2 exposes the standard Blood Pressure Service (`0x1810`). This is a
-   reasonable bet since the device integrates with MedM's Health Diary app
-   (which aggregates dozens of BP monitor brands via the standard profile),
-   but it isn't confirmed. Run the app, tap "Connect & Sync", and check the
-   status text:
-   - If you see "Subscribed to Blood Pressure Measurement indications" —
-     you're set, standard profile confirmed.
-   - If you see "service not found" — the device uses a vendor-specific
-     profile instead. Capture an HCI snoop log while pairing with the real
-     MedM app (Developer Options → Enable Bluetooth HCI snoop log → pair →
-     pull `/sdcard/btsnoop_hci.log` via `adb pull` → open in Wireshark) to
-     find the actual service/characteristic UUIDs and byte layout, then
-     update the UUID constants and `BloodPressureParser`.
+1. **Health Connect** must be on the phone (built into Android 14+, or from
+   the Play Store on older versions).
+2. Tap **Connect & Sync**, take a reading on the BP2, then tap **Save to
+   Health Connect**. Readings are timestamped with the phone's clock.
+3. If the status shows "Service 0xffe0 not found on this device", you've
+   probably connected to a different Bluetooth device: the scan matches any
+   name containing "BP" or "OxiPro". Move away from other BP monitors and
+   try again.
 
-2. **Narrow the scan filter.** `BleManager.startScan` currently matches any
-   advertised name containing "BP" or "OxiPro" — tighten this to the exact
-   advertised name once you've confirmed it (check via `nRF Connect` app or
-   the scan log).
-
-3. **Health Connect app** must be installed on the test device (Play Store,
-   or built into the OS on Android 14+).
+Not implemented yet: importing the history stored on the monitor, and
+setting the monitor's clock. See [PROTOCOL.md](PROTOCOL.md) §3 and §6.
 
 ## Version summary
 
